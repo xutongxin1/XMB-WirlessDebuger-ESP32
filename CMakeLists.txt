@@ -4,6 +4,14 @@ cmake_minimum_required(VERSION 3.5)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
-project(wifi_station)
 
+add_compile_options (-fdiagnostics-color=always)
+
+include_directories(${CMAKE_SOURCE_DIR}/components/wireless-esp8266-dap)
+
+set(CMAKE_BUILD_PARALLEL_LEVEL 12)
+
+set(EXTRA_COMPONENT_DIRS "./components/wireless-esp8266-dap/components")
+
+project(XMB_WirelessDebuger)
 

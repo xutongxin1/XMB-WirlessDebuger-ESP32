@@ -1,3 +1,3 @@
-FILE(GLOB_RECURSE main_source ./main/*.*)
+FILE(GLOB_RECURSE FUNCTION_source ./*.*)
 
-idf_component_register(SRCS ${main_source} INCLUDE_DIRS "./main" ".")
+idf_component_register(SRCS ${main_source} INCLUDE_DIRS "./")

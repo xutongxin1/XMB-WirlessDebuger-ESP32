@@ -11,7 +11,7 @@ include_directories(${CMAKE_SOURCE_DIR}/components/wireless-esp8266-dap)
 
 set(CMAKE_BUILD_PARALLEL_LEVEL 12)
 
-set(EXTRA_COMPONENT_DIRS "./components/wireless-esp8266-dap/components")
+set(EXTRA_COMPONENT_DIRS "./components/wireless-esp8266-dap/components" "./components/wireless-esp8266-dap/WirelessDAP_main")
 
 project(XMB_WirelessDebuger)
 

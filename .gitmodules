@@ -1,6 +1,7 @@
-[submodule "wireless-esp8266-dap"]
-	path = ./components/wireless-esp8266-dap
+[submodule "components/wireless-esp8266-dap"]
+	path = components/wireless-esp8266-dap
 	url = https://github.com/xutongxin1/wireless-esp8266-dap.git
-[submodule "XMB-FunctionModules"]
-	path = ./components/XMB-FunctionModules
+[submodule "components/XMB-FunctionModules"]
+	path = components/XMB-FunctionModules
 	url = https://github.com/xutongxin1/XMB-FunctionModules.git
+	branch = DEV-DMZ

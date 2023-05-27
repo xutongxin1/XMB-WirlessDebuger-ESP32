@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "wifi_configuration.h": "c",
-        "tcp_server1.h": "c",
-        "handle.h": "c",
-        "elaphurelink_protocol.h": "c"
-    }
-}

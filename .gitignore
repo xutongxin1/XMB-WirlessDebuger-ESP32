@@ -4,3 +4,7 @@ cmake-build-debug/
 .idea/
 
 managed_components/
+
+cmake-build-debug-esp32/
+
+build/

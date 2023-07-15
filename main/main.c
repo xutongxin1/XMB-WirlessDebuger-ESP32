@@ -18,10 +18,10 @@
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
-#include "InstructionServer/tcp_server1.h"
+#include "InstructionServer/InstructionServer.h"
 #include "UART/uart_val.h"
 #include "TCP-CH/tcp.h"
-#include "SwitchMode/Handle.h"
+#include "SwitchMode/SwitchModeHandle.h"
 #include "dap_tcp_server.h"
 #include "DAP_handle.h"
 #include "wifi_handle.h"
@@ -61,9 +61,9 @@ static EventGroupHandle_t s_wifi_event_group;
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
 
-TaskHandle_t kDAPTaskHandle = NULL;
 
-static const char *TAG = "wifi station";
+
+static const char *TAG = "Startup";
 
 static int s_retry_num = 0;
 
@@ -170,50 +170,41 @@ static int s_retry_num = 0;
 //    vEventGroupDelete(s_wifi_event_group);
 //}
 
-void app_main(void)
-{
+void app_main(void) {
 
-    //WIFI  连wifi
+    //TODO：配网逻辑
+
+    //初始化wifi
+
     wifi_init();
 
     //NVS   进NVS
 
-//    Initialize NVS
     esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
-
-//    if (nvs_flash_read(listen_sock))
-//    {
-//        attach_status(Command_Flag);
-//    }
+    int command_mode = NVSFlashRead();
+    if (command_mode != -1) {
+        working_mode = command_mode;
+        ChangeWorkMode(command_mode);
+    }
 
     // Mode
-    // 指令通道
-    // TcpCommandPipeTask
-    xTaskCreatePinnedToCore(TcpCommandPipeTask, "tcp_server1", 4096, NULL, 14, NULL, 1);
+    // TcpCommandPipeTask 指令通道
+    xTaskCreatePinnedToCore(TCPInstructionTask, "TCPInstructionTask", 4096, NULL, 14, NULL, 1);
 
-    // USBIP的TCP服务器
-    xTaskCreatePinnedToCore(dap_tcp_server_task, "dap_tcp_server_task", 4096, NULL, 14, NULL,1);
+    if (working_mode == DAP) {
 
-    // DAP调试器的服务器
-    xTaskCreatePinnedToCore(DAP_Thread, "DAP_Task", 2048, NULL, 10, &kDAPTaskHandle,2);
+    }
 
 
 
-//    // Initialize NVS
-//    esp_err_t ret = nvs_flash_init();
-//    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
-//    {
-//        ESP_ERROR_CHECK(nvs_flash_erase());
-//        ret = nvs_flash_init();
-//    }
-//    ESP_ERROR_CHECK(ret);
-//    ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
+
+
+
 
 //    wifi_init_sta();  wifi初始化
 //    TaskHandle_t xHandle = NULL;

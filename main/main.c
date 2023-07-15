@@ -171,6 +171,14 @@ static int s_retry_num = 0;
 //}
 
 void app_main(void) {
+    //初始化NVS
+    //Initialize NVS
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 
     //TODO：配网逻辑
 
@@ -178,14 +186,7 @@ void app_main(void) {
 
     wifi_init();
 
-    //NVS   进NVS
-
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(ret);
+    //NVS   读取NVS
     int command_mode = NVSFlashRead();
     if (command_mode != -1) {
         working_mode = command_mode;
